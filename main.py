@@ -3,7 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from lxml import etree
 import codecs
-
+start = "2020-08-01"
+end = "2020-08-31"
 url = "https://satellite.nsmc.org.cn/portalsite/Data/Satellite.aspx"
 url2 = "https://satellite.nsmc.org.cn/portalsite/Data/FileShow.aspx"
 browser = webdriver.Chrome()
@@ -18,9 +19,9 @@ browser.find_element_by_xpath(
 browser.find_element_by_xpath(
     '//*[@id="FY4A-_AGRI--_N_REGC_1047E_L1-_FDI-_MULT_NOM_YYYYMMDDhhmmss_YYYYMMDDhhmmss_4000M_V0001.HDF"]').click()
 date_start = browser.find_element_by_xpath('//*[@id="txtBeginDate"]')
-browser.execute_script("arguments[0].value = '2020-06-01'", date_start)
+browser.execute_script("arguments[0].value = '{:s}'".format(start), date_start)
 date_end = browser.find_element_by_xpath('//*[@id="txtEndDate"]')
-browser.execute_script("arguments[0].value = '2020-06-30'", date_end)
+browser.execute_script("arguments[0].value = '{:s}'".format(end), date_end)
 
 browser.find_element_by_xpath('//*[@id="imgSearch"]').click()
 time.sleep(1)
@@ -43,9 +44,14 @@ while True:
         for i in range(30):
             fname = tree.xpath('//*[@id="inf_{:d}"]'.format(i))
             print(fname[0].attrib.get("title"))
-        browser.find_element_by_xpath('//*[@id="pager"]/div/a[7]').click()
-        time.sleep(1)
+        try:
+            browser.find_element_by_link_text("下一页").click()
+        except :
+            print("done!")
+            break
+    time.sleep(1)
     html = browser.execute_script("return document.documentElement.outerHTML")
     time.sleep(2)
     tree = etree.HTML(html)
     flag = tree.xpath('//*[@id="inf_0"]')
+browser.quit()
