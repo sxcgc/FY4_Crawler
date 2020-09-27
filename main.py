@@ -3,8 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from lxml import etree
 import codecs
-start = "2020-08-01"
-end = "2020-08-31"
+start = "2020-06-01"
+end = "2020-06-30"
 url = "https://satellite.nsmc.org.cn/portalsite/Data/Satellite.aspx"
 url2 = "https://satellite.nsmc.org.cn/portalsite/Data/FileShow.aspx"
 browser = webdriver.Chrome()
